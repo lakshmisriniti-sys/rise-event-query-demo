@@ -1,0 +1,40 @@
+Model: gemini-3.5-flash-lite
+S1_disk: A disk warning above 90% usage is later followed by a failed write.
+  LLM + feedback + data inspection tool:
+   round 1: train F1 0.89  {"steps": [{"type": "DiskWarning", "where": {"usage": [">", 92]}}, {"type": "WriteFail"}], "within": 4}
+   round 2: train F1 0.93  {"steps": [{"type": "DiskWarning", "where": {"usage": [">=", 92]}}, {"type": "WriteFail"}], "within": 4}
+   round 3: train F1 0.71  {"steps": [{"type": "DiskWarning", "where": {"usage": [">", 94]}}, {"type": "WriteFail"}], "within": 4}
+   API error (503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is cur...). Waiting 30s.
+   API error (503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is cur...). Waiting 60s.
+   round 4: train F1 0.81  {"steps": [{"type": "DiskWarning", "where": {"usage": [">", 93]}}, {"type": "WriteFail"}], "within": 4}
+   round 5: train F1 0.93  {"steps": [{"type": "DiskWarning", "where": {"usage": [">=", 92]}}, {"type": "WriteFail"}], "within": 4}
+   test F1 search    0.77  {"steps": [{"type": "DiskWarning"}, {"type": "WriteFail"}], "within": 3}
+   test F1 llm_first 0.92  {"steps": [{"type": "DiskWarning", "where": {"usage": [">=", 90]}}, {"type": "WriteFail"}], "within": null}
+   test F1 llm_loop  0.92  {"steps": [{"type": "DiskWarning", "where": {"usage": [">=", 90]}}, {"type": "WriteFail"}], "within": null}
+   test F1 llm_stats 0.92  {"steps": [{"type": "DiskWarning", "where": {"usage": [">=", 92]}}, {"type": "WriteFail"}], "within": 4}
+   test F1 hidden    0.96  {"steps": [{"type": "DiskWarning", "where": {"usage": [">", 90]}}, {"type": "WriteFail"}], "within": null}
+S2_payment_retries: Two payment retries followed by a timeout, all within 6 events.
+  LLM + feedback + data inspection tool:
+   round 1: train F1 0.82  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}], "within": null}
+   round 2: train F1 0.37  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Timeout"}, {"type": "Retry", "where": {"service": ["==", "payment"]}}], "within": null}
+   round 3: train F1 0.82  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}], "within": null}
+   round 4: train F1 0.85  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Timeout"}], "within": null}
+   round 5: train F1 0.85  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Timeout"}], "within": null}
+   test F1 search    0.65  {"steps": [{"type": "Retry"}, {"type": "Retry"}], "within": 3}
+   test F1 llm_first 0.27  {"steps": [{"type": "DBQuery", "where": {"latency": [">", 1000]}}], "within": null}
+   test F1 llm_loop  0.61  {"steps": [{"type": "Retry"}, {"type": "Retry"}, {"type": "Timeout"}], "within": null}
+   test F1 llm_stats 0.88  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Timeout"}], "within": null}
+   test F1 hidden    0.93  {"steps": [{"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Retry", "where": {"service": ["==", "payment"]}}, {"type": "Timeout"}], "within": 6}
+S3_slow_db: A cache miss followed within 4 events by a database query slower than 800 ms.
+  LLM + feedback + data inspection tool:
+   round 1: train F1 0.52  {"steps": [{"type": "DBQuery", "where": {"latency": [">", 1425]}}], "within": null}
+   round 2: train F1 0.76  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 1018]}}], "within": 5}
+   round 3: train F1 0.60  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 1425]}}], "within": 6}
+   round 4: train F1 0.80  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 1018]}}], "within": 4}
+   round 5: train F1 0.72  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 1200]}}], "within": 4}
+   test F1 search    0.56  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery"}], "within": 3}
+   test F1 llm_first 0.20  {"steps": [{"type": "Timeout"}, {"type": "Request", "where": {"service": ["==", "profile"]}}], "within": null}
+   test F1 llm_loop  0.56  {"steps": [{"type": "DBQuery", "where": {"latency": [">", 1000]}}], "within": null}
+   test F1 llm_stats 0.86  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 1018]}}], "within": 4}
+   test F1 hidden    0.94  {"steps": [{"type": "CacheMiss"}, {"type": "DBQuery", "where": {"latency": [">", 800]}}], "within": 4}
+Saved results/results.json. Now run: python make_chart.py

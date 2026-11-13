@@ -1,0 +1,1193 @@
+{
+  "S1_disk": {
+    "description": "A disk warning above 90% usage is later followed by a failed write.",
+    "history": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  90
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain a DiskWarning with high usage followed by a WriteFail.",
+        "precision": 0.9574468085106383,
+        "recall": 0.9473684210526315,
+        "f1": 0.9523809523809523,
+        "tp": 90,
+        "fp": 4,
+        "fn": 5
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  97
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "The failing traces share a high disk usage warning followed closely by a write failure, but we can refine the usage threshold or add specific sequencing to avoid matching normal traces.",
+        "precision": 0.9714285714285714,
+        "recall": 0.35789473684210527,
+        "f1": 0.5230769230769231,
+        "tp": 34,
+        "fp": 1,
+        "fn": 61
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  96
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently feature a DiskWarning with high usage followed by WriteFail, but constrained to specific higher usage values and order.",
+        "precision": 0.9777777777777777,
+        "recall": 0.4631578947368421,
+        "f1": 0.6285714285714286,
+        "tp": 44,
+        "fp": 1,
+        "fn": 51
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "WriteFail"
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain multiple WriteFail events or a DiskWarning followed by WriteFail, so a sequence of two WriteFail events captures them effectively.",
+        "precision": 0.9807692307692307,
+        "recall": 0.5368421052631579,
+        "f1": 0.6938775510204082,
+        "tp": 51,
+        "fp": 1,
+        "fn": 44
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "Login"
+            },
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  85
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently feature a DiskWarning followed by a WriteFail, but to improve precision over two WriteFails we can combine Login, DiskWarning with a lower usage threshold, and WriteFail.",
+        "precision": 0.7614678899082569,
+        "recall": 0.8736842105263158,
+        "f1": 0.8137254901960783,
+        "tp": 83,
+        "fp": 26,
+        "fn": 12
+      }
+    ],
+    "test": {
+      "search": {
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning"
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 3
+        },
+        "precision": 0.6507936507936508,
+        "recall": 0.9534883720930233,
+        "f1": 0.7735849056603774
+      },
+      "llm_first": {
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  90
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.9090909090909091,
+        "recall": 0.9302325581395349,
+        "f1": 0.9195402298850575
+      },
+      "llm_loop": {
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  90
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.9090909090909091,
+        "recall": 0.9302325581395349,
+        "f1": 0.9195402298850575
+      },
+      "llm_stats": {
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  92
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "precision": 1.0,
+        "recall": 0.8488372093023255,
+        "f1": 0.9182389937106918
+      },
+      "hidden": {
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">",
+                  90
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.9876543209876543,
+        "recall": 0.9302325581395349,
+        "f1": 0.9580838323353293
+      }
+    },
+    "history_stats": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">",
+                  92
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "Failing traces are characterized by a DiskWarning with high usage followed closely by a WriteFail event.",
+        "precision": 0.9746835443037974,
+        "recall": 0.8105263157894737,
+        "f1": 0.8850574712643677,
+        "tp": 77,
+        "fp": 2,
+        "fn": 18
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  92
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "To capture the failing traces that missed the previous query while avoiding the normal traces, we can use a stricter usage threshold or combine DiskWarning with a higher usage and a WriteFail, or check for DiskWarning with usage >= 92 followed by WriteFail.",
+        "precision": 0.9770114942528736,
+        "recall": 0.8947368421052632,
+        "f1": 0.9340659340659342,
+        "tp": 85,
+        "fp": 2,
+        "fn": 10
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">",
+                  94
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "Failing traces frequently have a high DiskWarning usage followed by a WriteFail within a short span, and adjusting the usage threshold higher improves precision by filtering false positives.",
+        "precision": 0.9814814814814815,
+        "recall": 0.5578947368421052,
+        "f1": 0.7114093959731543,
+        "tp": 53,
+        "fp": 1,
+        "fn": 42
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">",
+                  93
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "Using a slightly lower usage threshold for DiskWarning followed by WriteFail within 4 events captures all failing traces while avoiding the normal trace matched previously.",
+        "precision": 0.9705882352941176,
+        "recall": 0.6947368421052632,
+        "f1": 0.8098159509202455,
+        "tp": 66,
+        "fp": 2,
+        "fn": 29
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "DiskWarning",
+              "where": {
+                "usage": [
+                  ">=",
+                  92
+                ]
+              }
+            },
+            {
+              "type": "WriteFail"
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "A DiskWarning with usage >= 92 followed closely by a WriteFail effectively identifies failing traces while filtering out normal ones.",
+        "precision": 0.9770114942528736,
+        "recall": 0.8947368421052632,
+        "f1": 0.9340659340659342,
+        "tp": 85,
+        "fp": 2,
+        "fn": 10
+      }
+    ]
+  },
+  "S2_payment_retries": {
+    "description": "Two payment retries followed by a timeout, all within 6 events.",
+    "history": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain DBQueries with latency greater than 1000.",
+        "precision": 0.3013698630136986,
+        "recall": 0.24444444444444444,
+        "f1": 0.2699386503067484,
+        "tp": 22,
+        "fp": 51,
+        "fn": 68
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Logout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain a sequence of a DBQuery with high latency followed by a Timeout and a Logout.",
+        "precision": 0.40476190476190477,
+        "recall": 0.18888888888888888,
+        "f1": 0.25757575757575757,
+        "tp": 17,
+        "fp": 25,
+        "fn": 73
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            },
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces contain multiple consecutive DBQueries or High latency DBQuery followed by Timeout, but all failing traces specifically contain a DBQuery with latency > 1000 followed by multiple Retries and a Timeout.",
+        "precision": 0.47058823529411764,
+        "recall": 0.17777777777777778,
+        "f1": 0.25806451612903225,
+        "tp": 16,
+        "fp": 18,
+        "fn": 74
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            },
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces contain multiple DBQuery events with high latency followed by multiple Retries and Timeouts.",
+        "precision": 0.5416666666666666,
+        "recall": 0.14444444444444443,
+        "f1": 0.22807017543859642,
+        "tp": 13,
+        "fp": 11,
+        "fn": 77
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain multiple Retry events followed by a Timeout near the end, while avoiding high-latency DB queries as the sole discriminator.",
+        "precision": 0.42424242424242425,
+        "recall": 0.9333333333333333,
+        "f1": 0.5833333333333333,
+        "tp": 84,
+        "fp": 114,
+        "fn": 6
+      }
+    ],
+    "test": {
+      "search": {
+        "query": {
+          "steps": [
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Retry"
+            }
+          ],
+          "within": 3
+        },
+        "precision": 0.49411764705882355,
+        "recall": 0.9438202247191011,
+        "f1": 0.6486486486486486
+      },
+      "llm_first": {
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.31343283582089554,
+        "recall": 0.23595505617977527,
+        "f1": 0.2692307692307692
+      },
+      "llm_loop": {
+        "query": {
+          "steps": [
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Retry"
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.45161290322580644,
+        "recall": 0.9438202247191011,
+        "f1": 0.610909090909091
+      },
+      "llm_stats": {
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.8863636363636364,
+        "recall": 0.8764044943820225,
+        "f1": 0.8813559322033898
+      },
+      "hidden": {
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": 6
+        },
+        "precision": 0.9873417721518988,
+        "recall": 0.8764044943820225,
+        "f1": 0.9285714285714286
+      }
+    },
+    "history_stats": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces are strongly characterized by having at least two payment retries, which distinguishes them effectively from normal traces.",
+        "precision": 0.8,
+        "recall": 0.8444444444444444,
+        "f1": 0.8216216216216217,
+        "tp": 76,
+        "fp": 19,
+        "fn": 14
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Based on the failing traces and data inspection tool output, sequences involving Retry with payment service followed by Timeout and another Retry or Timeout closely capture the failing behavior better than just two payment retries.",
+        "precision": 0.696969696969697,
+        "recall": 0.25555555555555554,
+        "f1": 0.37398373983739835,
+        "tp": 23,
+        "fp": 10,
+        "fn": 67
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces frequently exhibit two consecutive payment retries, which distinguishes them from normal traces with high precision and recall.",
+        "precision": 0.8,
+        "recall": 0.8444444444444444,
+        "f1": 0.8216216216216217,
+        "tp": 76,
+        "fp": 19,
+        "fn": 14
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces frequently contain multiple payment retries combined with a timeout, so adding a Timeout step after the two payment retries helps filter out normal sessions.",
+        "precision": 0.872093023255814,
+        "recall": 0.8333333333333334,
+        "f1": 0.8522727272727274,
+        "tp": 75,
+        "fp": 11,
+        "fn": 15
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            },
+            {
+              "type": "Timeout"
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Adding a Timeout step after two payment retries increases precision by filtering out normal traces that have the retries without a timeout sequence.",
+        "precision": 0.872093023255814,
+        "recall": 0.8333333333333334,
+        "f1": 0.8522727272727274,
+        "tp": 75,
+        "fp": 11,
+        "fn": 15
+      }
+    ]
+  },
+  "S3_slow_db": {
+    "description": "A cache miss followed within 4 events by a database query slower than 800 ms.",
+    "history": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Request",
+              "where": {
+                "service": [
+                  "==",
+                  "profile"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces contain a Timeout followed by a Request for profile service.",
+        "precision": 0.25609756097560976,
+        "recall": 0.30434782608695654,
+        "f1": 0.27814569536423844,
+        "tp": 21,
+        "fp": 61,
+        "fn": 48
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces have a high DBQuery latency, let's target DBQuery with latency > 1000",
+        "precision": 0.37681159420289856,
+        "recall": 0.7536231884057971,
+        "f1": 0.502415458937198,
+        "tp": 52,
+        "fp": 86,
+        "fn": 17
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces contain a Timeout event followed by a Retry on payment, so we can match a Timeout followed by a Retry for payment.",
+        "precision": 0.34615384615384615,
+        "recall": 0.13043478260869565,
+        "f1": 0.1894736842105263,
+        "tp": 9,
+        "fp": 17,
+        "fn": 60
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain a DBQuery with very high latency (>1000).",
+        "precision": 0.37681159420289856,
+        "recall": 0.7536231884057971,
+        "f1": 0.502415458937198,
+        "tp": 52,
+        "fp": 86,
+        "fn": 17
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Retry",
+              "where": {
+                "service": [
+                  "==",
+                  "payment"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces consistently contain multiple high-latency DBQueries or specific sequential anomalies like Timeout followed by Retry, whereas normal ones lack this pattern. Let's look at Timeout followed by Retry(service=payment).",
+        "precision": 0.34615384615384615,
+        "recall": 0.13043478260869565,
+        "f1": 0.1894736842105263,
+        "tp": 9,
+        "fp": 17,
+        "fn": 60
+      }
+    ],
+    "test": {
+      "search": {
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery"
+            }
+          ],
+          "within": 3
+        },
+        "precision": 0.3905325443786982,
+        "recall": 0.9850746268656716,
+        "f1": 0.559322033898305
+      },
+      "llm_first": {
+        "query": {
+          "steps": [
+            {
+              "type": "Timeout"
+            },
+            {
+              "type": "Request",
+              "where": {
+                "service": [
+                  "==",
+                  "profile"
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.19444444444444445,
+        "recall": 0.208955223880597,
+        "f1": 0.2014388489208633
+      },
+      "llm_loop": {
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1000
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "precision": 0.41134751773049644,
+        "recall": 0.8656716417910447,
+        "f1": 0.5576923076923076
+      },
+      "llm_stats": {
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1018
+                ]
+              }
+            }
+          ],
+          "within": 4
+        },
+        "precision": 0.9807692307692307,
+        "recall": 0.7611940298507462,
+        "f1": 0.8571428571428572
+      },
+      "hidden": {
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  800
+                ]
+              }
+            }
+          ],
+          "within": 4
+        },
+        "precision": 0.9836065573770492,
+        "recall": 0.8955223880597015,
+        "f1": 0.9375
+      }
+    },
+    "history_stats": [
+      {
+        "round": 1,
+        "query": {
+          "steps": [
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1425
+                ]
+              }
+            }
+          ],
+          "within": null
+        },
+        "reasoning": "Failing traces frequently contain a DBQuery with high latency (> 1425).",
+        "precision": 0.5483870967741935,
+        "recall": 0.4927536231884058,
+        "f1": 0.5190839694656489,
+        "tp": 34,
+        "fp": 28,
+        "fn": 35
+      },
+      {
+        "round": 2,
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1018
+                ]
+              }
+            }
+          ],
+          "within": 5
+        },
+        "reasoning": "Failing traces frequently feature a CacheMiss followed closely by a DBQuery with high latency.",
+        "precision": 0.8421052631578947,
+        "recall": 0.6956521739130435,
+        "f1": 0.761904761904762,
+        "tp": 48,
+        "fp": 9,
+        "fn": 21
+      },
+      {
+        "round": 3,
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1425
+                ]
+              }
+            }
+          ],
+          "within": 6
+        },
+        "reasoning": "The query combines CacheMiss followed by a high latency DBQuery with a higher threshold (>1425) to filter out normal traces while capturing failing traces.",
+        "precision": 0.8857142857142857,
+        "recall": 0.4492753623188406,
+        "f1": 0.5961538461538461,
+        "tp": 31,
+        "fp": 4,
+        "fn": 38
+      },
+      {
+        "round": 4,
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1018
+                ]
+              }
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "We can improve the precision by combining a CacheMiss followed by a DBQuery with high latency (> 1018) with another event sequence characteristic of failures, such as a high latency DBQuery or another CacheMiss within a specific window.",
+        "precision": 0.9591836734693877,
+        "recall": 0.6811594202898551,
+        "f1": 0.7966101694915255,
+        "tp": 47,
+        "fp": 2,
+        "fn": 22
+      },
+      {
+        "round": 5,
+        "query": {
+          "steps": [
+            {
+              "type": "CacheMiss"
+            },
+            {
+              "type": "DBQuery",
+              "where": {
+                "latency": [
+                  ">",
+                  1200
+                ]
+              }
+            }
+          ],
+          "within": 4
+        },
+        "reasoning": "We can improve precision by increasing the latency threshold or adjusting the step distance, while capturing the failing traces that missed the previous high-latency match.",
+        "precision": 0.9523809523809523,
+        "recall": 0.5797101449275363,
+        "f1": 0.7207207207207207,
+        "tp": 40,
+        "fp": 2,
+        "fn": 29
+      }
+    ]
+  }
+}
